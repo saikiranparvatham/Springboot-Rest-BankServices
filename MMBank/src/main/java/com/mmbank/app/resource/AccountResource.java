@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -34,7 +35,7 @@ public class AccountResource {
 		return repository.findAll();
 	}
 	
-	@PutMapping
+	@PutMapping()
 	public void updateEmployee(@RequestBody Account account) {
 		repository.save(account);
 	}
@@ -52,5 +53,15 @@ public class AccountResource {
 		 double balance=account.get().getCurrentBalance();
 		 return balance;
 	}
+	
+
+	@PutMapping("/{accountNumber}")
+	public void updateBalance(@RequestParam("currentBalance") double currentBalance,@PathVariable int accountNumber)
+	{
+		Optional<Account> optional = repository.findById(accountNumber);
+		Account account = optional.get();
+		account.setCurrentBalance(currentBalance);
+		repository.save(account);
+ 	}
 	
 }
